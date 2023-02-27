@@ -13,7 +13,6 @@ def vCustomer():
         for x in file:
             a = x.split(",")
             customerList.append(a)
-        print(customerList)
     except Exception as e:
         print(e)
         customerList = []
@@ -31,10 +30,8 @@ def rCustomer():
             cLocation =  request.form['location']
             cIc =  request.form['Ic']
             cIc = cIc.replace('-','')
-
             file = open('customer.txt', 'r')
             x = len(file.readlines())
-
             Id = x+1
             file1 = open('customer.txt','a')
             data = str(Id)+","+cName+","+cAge+","+cLocation+","+cIc
@@ -43,30 +40,34 @@ def rCustomer():
                 file1.write(str(data))
             else:
                 file1.write(str(data))
-
-        
+            
     except Exception as e:
        print(str(e))
        customerList = ['Error']
 
-    return render_template('register.html',title="Customer" ,customer=customerList)
+    return render_template('register.html',customer=customerList)
 
-# @app.route('/updateCustomer/', methods=['POST'])
-# def uCustomer():
-#     try:
-#         cName = request.json['cName']
-#         cAge = request.json['cAge']
-#         cLocation = request.json['cLocation']
-#         cIc = request.json['cIc']
-#         cId = request.json['cId']
+@app.route('/deleteCustomer/', methods=['POST'])
+def dCustomer():
+    customerList = []
+    try:
+        cName = request.json['cName']
+        cAge = request.json['cAge']
+        cLocation = request.json['cLocation']
+        cIc = request.json['cIc']
+        cId = request.json['cId']
+        print("dasfas")
 
-#         response = jsonify(response_data)
-#     except Exception as e:
-#         response_data = {'Error':str(e)}
-#         response = jsonify(response_data)
 
-#     response.headers.add('Access-Control-Allow-Origin', '*')
-#     return response
+        file = open("customer.txt","r")
+        for x in file:
+            a = x.split(",")
+            customerList.append(a)
+        
+    except Exception as e:
+        print(e)
+
+    return render_template('home.html',title="Customer" ,customer=customerList)
 
 # @app.route('/deleteCustomer/', methods=['POST'])
 # def dCustomer():

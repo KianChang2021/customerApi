@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
+            div.a {
+                position: relative;
+                width: 400px;
+                height: 200px;
+            }
+        </style>
         <title>{{ title }}</title>
     </head>
     <body>
+        <div class="a">
+
         <div>
-              <h2>
-                  <form action="{{ url_for('rCustomer') }}" method="post" text-align="center">
-                      <input id="name" name="name" type="text" placeholder="Enter Customer Name" class="textbox"/></br>
-                      <input id="age" name="age" type="text" placeholder="Enter Customer Age" class="textbox"/></br>
-                      <input id="location" name="location" type="text" placeholder="Enter Customer Location" class="textbox"/></br>
-                      <input id="Ic" name="Ic" type="text" placeholder="Example : 909090089090" class="textbox"/></br>
-                      
-                      <input type="submit" class="btn" value="register" href="{{ url_for('vCustomer') }}"></br>
-                  </form>
-                  <p>For you information input text field didnot have any validate<p>
-              </h2>
-            </div>
-          </div>
+            <h2><a href="{{ url_for('vCustomer') }}">Home</a></h2>
+            <form action="{{ url_for('rCustomer') }}" method="post">
+                <label>Name:</label>
+                <input id="name" name="name" type="text" placeholder="Enter Customer Name" class="textbox"/><br/>
+                <label>Age:</label>
+                <input id="age" name="age" type="text" placeholder="Enter Customer Age" class="textbox"/><br/>
+                <label>Location:</label>
+                <input id="location" name="location" type="text" placeholder="Enter Customer Location" class="textbox"/><br/>
+                <label>Identity Card Number:</label>
+                <input id="Ic" name="Ic" type="text" placeholder="Example : 909090089090" class="textbox"/><br/>
+                
+                <input type="submit" class="btn" value="register">
+            </form>
+            <h2>
+                <p>For you information input text field didnot have any validate<p>
+            </h2>
+        </div>
+        </div>
 	</ul>
     </body>
 </html>
