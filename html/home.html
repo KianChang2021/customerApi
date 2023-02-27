@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+              <th>Id</th>
+              <th>Customer Name</th>
+              <th>Customer Age</th>
+              <th>Customer Location</th>
+              <th>Customer Ic</th>
+            </tr>
+            {% for x in customer %}
+            <tr>
+                <td>{{x[0]}}</td>
+                <td>{{x[1]}}</td>
+                <td>{{x[2]}}</td>
+                <td>{{x[3]}}</td>
+                <td>{{x[4]}}</td>
+            </tr>
+            {% endfor %}
+          </table>
+       
+        
+	</ul>
+    </body>
+</html>

@@ -1,100 +1,87 @@
-from flask import Flask,jsonify,request,json
+from flask import Flask,render_template,request
 from flask_cors import CORS
 from waitress import serve
-from db import Customer as c
-app = Flask(__name__)
+# from db import Customer as c
+app = Flask(__name__,template_folder='html')
 CORS(app)
 
 @app.route('/viewCustomer/', methods=['GET'])
 def vCustomer():
     try:
         customerList = []
-        all_customer = c.getCustomer()
-        for x in all_customer:
-            eCustomer = [x.customerName,x.Id,x.customerAge,x.customerLocation]
-            customerList.append(eCustomer)
-        response = jsonify(customerList)
-
+        file = open("customer.txt","r")
+        for x in file:
+            a = x.split(",")
+            customerList.append(a)
+        print(customerList)
     except Exception as e:
-        response_data = {'Status':'Error in '+str(e)}
-        response = jsonify(response_data)
+        print(e)
+        customerList = []
 
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+    return render_template('home.html',title="Customer" ,customer=customerList)
 
-@app.route('/registerCustomer/', methods=['POST'])
+
+@app.route('/registerCustomer/', methods=['GET','POST'])
 def rCustomer():
     try:
-        cName = request.json['cName']
-        cAge = request.json['cAge']
-        cLocation = request.json['cLocation']
-        cIc = request.json['cIc']
-        cIc = cIc.replace('-','')
-        exist = c.checkCustomerIc(cIc)
-        if exist == True:
-            response_data = {'Status':'Customer Ic exist'}
-        else:
-            result = c.addCustomer(cName,cAge,cLocation,cIc)
-            if result != True:
-                response_data = {'Status':'Fail to Register' }
+        customerList = []
+        if request.method == 'POST':
+            cName = request.form['name']
+            cAge =  request.form['age']
+            cLocation =  request.form['location']
+            cIc =  request.form['Ic']
+            cIc = cIc.replace('-','')
+
+            file = open('customer.txt', 'r')
+            x = len(file.readlines())
+
+            Id = x+1
+            file1 = open('customer.txt','a')
+            data = str(Id)+","+cName+","+cAge+","+cLocation+","+cIc
+            if x >0:
+                file1.write("\n")
+                file1.write(str(data))
             else:
-                response_data = {'Status':'Success Register' }
-        response = jsonify(response_data)
+                file1.write(str(data))
+
+        
     except Exception as e:
-        response_data = {'Error':str(e)}
-        response = jsonify(response_data)
+       print(str(e))
+       customerList = ['Error']
 
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+    return render_template('register.html',title="Customer" ,customer=customerList)
 
-@app.route('/updateCustomer/', methods=['POST'])
-def uCustomer():
-    try:
-        cName = request.json['cName']
-        cAge = request.json['cAge']
-        cLocation = request.json['cLocation']
-        cIc = request.json['cIc']
-        cId = request.json['cId']
-        # Check ic is it exists
-        exist = c.checkCustomerId(cId)
-        if exist != True:
-            response_data = {'Status':'Customer Id not exist'}
-        else:
-            result = c.updateCustomer(cName,cAge,cLocation,cIc,cId)
-            if result != True:
-                response_data = {'Status':'Fail to Update' }
-            else:
-                response_data = {'Status':'Success Update' }
-        response = jsonify(response_data)
-    except Exception as e:
-        response_data = {'Error':str(e)}
-        response = jsonify(response_data)
+# @app.route('/updateCustomer/', methods=['POST'])
+# def uCustomer():
+#     try:
+#         cName = request.json['cName']
+#         cAge = request.json['cAge']
+#         cLocation = request.json['cLocation']
+#         cIc = request.json['cIc']
+#         cId = request.json['cId']
 
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+#         response = jsonify(response_data)
+#     except Exception as e:
+#         response_data = {'Error':str(e)}
+#         response = jsonify(response_data)
 
-@app.route('/deleteCustomer/', methods=['POST'])
-def dCustomer():
-    try:
-        cId = request.json['cId']
-        # Check ic is it exists
-        exist = c.checkCustomerId(cId)
-        if exist != True:
-            response_data = {'Status':'Customer did not exist'}
-        else:
-            result = c.deleteCustomer(cId)
-            if result != True:
-                response_data = {'Status':'Fail to Delete' }
-            else:
-                response_data = {'Status':'Success Delete' }
-        response = jsonify(response_data)
-    except Exception as e:
-        response_data = {'Error':str(e)}
-        response = jsonify(response_data)
+#     response.headers.add('Access-Control-Allow-Origin', '*')
+#     return response
 
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+# @app.route('/deleteCustomer/', methods=['POST'])
+# def dCustomer():
+#     try:
+#         cId = request.json['cId']
+#         # Check ic is it exists
+        
+#         response = jsonify(response_data)
+#     except Exception as e:
+#         response_data = {'Error':str(e)}
+#         response = jsonify(response_data)
+
+#     response.headers.add('Access-Control-Allow-Origin', '*')
+#     return response
 
 
 if __name__ == '__main__':
-    serve(app, host="0.0.0.0", port=8080)
+    app.run()
