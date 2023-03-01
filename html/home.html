@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ title }}</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        
     </head>
     <body>
         <h2><a href="{{ url_for('rCustomer') }}">Register</a></h2>
@@ -19,13 +20,15 @@
                 <td>{{x[1]}}</td>
                 <td>{{x[2]}}</td>
                 <td>{{x[3]}}</td>
-                <td>{{x[4]}}</td>
-                <td>
-                    <form action="{{url_for('dCustomer')}}" method="post">
-                        <button type="submit" name="id" class="btn btn-danger">
-                            <i class="far fa-trash-alt"></i>
-                        </button>
-                    </form>{{x[0]}}
+                <form method="post" action="{{ url_for('gCustomer') }}">
+                    <td value="{{x[4]}}">
+                        <input type="submit" name="ic" value="{{x[4]}}"></input>
+                    </td>
+                </form>
+                <td value="{{x[0]}}">
+                <button name="id" class="delete" value="{{x[0]}}">
+                    <i class="far fa-trash-alt">Delete</i>
+                </button>
                 </td>
             </tr>
             {% endfor %}
@@ -35,3 +38,22 @@
 	</ul>
     </body>
 </html>
+<script>
+
+$('.delete').click(function(){
+    Id = $(this).attr('value')
+    var data = {
+        ID: $(this).attr('value')
+    };
+    
+    $.ajax({
+          type: 'POST',
+          url : "{{url_for('dCustomer')}}",
+          contentType: 'application/json',
+          data: JSON.stringify(data),
+      })
+      .done(function(data) {
+          location.reload();
+      })
+    });
+</script>

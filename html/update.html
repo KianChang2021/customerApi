@@ -1,22 +1,29 @@
 <!DOCTYPE html>
 <html>
     <head>
+
     </head>
     <body>
+        <div class="a">
+
         <div>
             <h2><a href="{{ url_for('vCustomer') }}">Home</a></h2>
-            <form action="{{ url_for('rCustomer') }}" method="post">
+            
+            <form action="{{ url_for('uCustomer') }}" method="post">
+                {% for x in customer %}
+                <input id="id" name="id" type="text" value="{{x[0]}}" class="textbox" hidden/><br/>
                 <label>Name:</label>
-                <input id="name" name="name" type="text" placeholder="Enter Customer Name" class="textbox"/><br/>
+                <input id="name" name="name" type="text" value="{{x[1]}}" class="textbox"/><br/>
                 <label>Age:</label>
-                <input id="age" name="age" type="text" placeholder="Enter Customer Age" class="textbox"/><br/>
+                <input id="age" name="age" type="text" value="{{x[2]}}" class="textbox"/><br/>
                 <label>Location:</label>
-                <input id="location" name="location" type="text" placeholder="Enter Customer Location" class="textbox"/><br/>
+                <input id="location" name="location" type="text" value="{{x[3]}}" class="textbox"/><br/>
                 <label>Identity Card Number:</label>
-                <input id="Ic" name="Ic" type="text" placeholder="Example : 909090089090" class="textbox"/><br/>
-                
-                <input type="submit" class="btn" value="register">
+                <input id="ic" name="ic" type="text" value="{{x[4]}}" class="textbox"/><br/>
+                {% endfor %}
+                <input type="submit" class="btn" value="update">
             </form>
+            
             {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="flashes">
@@ -26,9 +33,11 @@
                 </div>
             {% endif %}
             {% endwith %}
+      
             <h2>
                 <p>For you information input text field didnot have any validate<p>
             </h2>
+        </div>
         </div>
 	</ul>
     </body>
